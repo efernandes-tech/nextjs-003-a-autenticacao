@@ -10,7 +10,8 @@ const controllers = {
 
     nookies.set(ctx, REFRESH_TOKEN_NAME, req.body.refresh_token, {
       httpOnly: true,
-      sameSite: 'lax'
+      sameSite: 'lax',
+      path: '/'
     });
 
     res.json({
@@ -40,18 +41,19 @@ const controllers = {
     })
 
     if (refreshResponse.ok) {
-      nookies.set(cte, REFRESH_TOKEN_NAME, refreshResponse.body.data.refresh_token, {
+      nookies.set(ctx, REFRESH_TOKEN_NAME, refreshResponse.body.data.refresh_token, {
         httpOnly: true,
-        sameSite: 'lax'
+        sameSite: 'lax',
+        path: '/'
       });
 
       tokenService.save(refreshResponse.body.data.access_token, ctx);
 
-      res.json({
-        refreshResponse
+      res.status(200).json({
+        data: refreshResponse.body.data
       })
     } else {
-      res.json({
+      res.status(401).json({
         status: 401,
         message: 'Não autorizado'
       })
