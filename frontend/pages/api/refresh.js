@@ -66,6 +66,20 @@ const controllerBy = {
   // GET: controllers.displayCookies,
   GET: controllers.regenarateToken,
   PUT: controllers.regenarateToken,
+  DELETE: (req, res) => {
+    const ctx = { req, res };
+    nookies.destroy(ctx, REFRESH_TOKEN_NAME, {
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/'
+    });
+
+    res.status(200).json({
+      data: {
+        message: 'deleted with success!'
+      }
+    })
+  }
 }
 
 export default function handler(request, response) {
